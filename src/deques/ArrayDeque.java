@@ -83,7 +83,7 @@ public class ArrayDeque<E> implements Deque<E> {
         data[back] = null;
         size -= 1;
         if (needsDownsize()) {
-            resize(data.length / 2);
+            resize(data.length / 2); // data.length is the space left in underlying array
         }
         return result;
     }
@@ -157,11 +157,11 @@ public class ArrayDeque<E> implements Deque<E> {
      */
     @SuppressWarnings("unchecked")
     private void resize(int capacity) {
-        E[] newData = (E[]) new Object[capacity];
-        int i = increment(front, size);
+        E[] newData = (E[]) new Object[capacity]; // creates new array given capacity
+        int i = increment(front, data.length); // changed 'size' to 'data.length' to solve ConfusingTest
         for (int newIndex = 0; newIndex < size; newIndex += 1) {
-            newData[newIndex] = data[i];
-            i = increment(i, size);
+            newData[newIndex] = data[i]; // this goes out of bounds
+            i = increment(i, data.length); // changed 'size' to 'data.length' to solve anotherConfusingTest
         }
         front = newData.length - 1;
         back = size;
