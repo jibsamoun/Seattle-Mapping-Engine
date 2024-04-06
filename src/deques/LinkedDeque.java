@@ -64,7 +64,7 @@ public class LinkedDeque<E> implements Deque<E> {
         toRemove.next.prev = front;
         toRemove.prev = null;
         toRemove.next = null;
-        return toRemove.value; // how do i fix this?
+        return toRemove.value;
     }
 
     @Override
