@@ -16,7 +16,7 @@ public class SequentialSearchAutocomplete implements Autocomplete {
     private final List<CharSequence> elements;
 
     /**
-     * Constructs an empty instance.
+     * Constructs an empty instance
      */
     public SequentialSearchAutocomplete() {
         elements = new ArrayList<>();

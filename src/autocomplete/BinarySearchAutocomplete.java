@@ -17,7 +17,7 @@ public class BinarySearchAutocomplete implements Autocomplete {
     private final List<CharSequence> elements;
 
     /**
-     * Constructs an empty instance.
+     * Constructs an empty instance
      */
     public BinarySearchAutocomplete() {
         elements = new ArrayList<>();

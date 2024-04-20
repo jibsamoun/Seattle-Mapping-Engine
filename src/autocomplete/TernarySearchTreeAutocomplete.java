@@ -30,7 +30,7 @@ public class TernarySearchTreeAutocomplete implements Autocomplete {
     }
 
     /**
-     * Adds word to TST structure, by recursively adding each unique character to a node
+     * Adds word to TST structure, by recursively adding each unique character to a node.
      *
      * @param node The current node in the TST being traversed
      * @param word The word being traversed
