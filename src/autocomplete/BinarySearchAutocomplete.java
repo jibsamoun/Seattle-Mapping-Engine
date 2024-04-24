@@ -41,6 +41,8 @@ public class BinarySearchAutocomplete implements Autocomplete {
             CharSequence word = elements.get(i);
             if (Autocomplete.isPrefixOf(prefix, word)) { // if word contains prefix
                 matches.add(word); // add to matches list
+            } else {
+                break;
             }
         }
         return matches;
