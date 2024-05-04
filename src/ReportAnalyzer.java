@@ -1,3 +1,6 @@
+import minpq.MinPQ;
+import minpq.UnsortedArrayMinPQ;
+import java.util.HashMap;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -38,6 +41,31 @@ public class ReportAnalyzer {
                 .toList();
 
         // TODO: Display the most commonly-reported WCAG recommendations using MinPQ
-        throw new UnsupportedOperationException();
+         throw new UnsupportedOperationException();
+        // Count occurrences of each unique WCAG tag
+//        Map<String, Integer> tagCounts = new HashMap<>();
+//        for (String tag : wcagTags) {
+//            tagCounts.put(tag, tagCounts.getOrDefault(tag, 0) + 1);
+//        }
+//
+//        // Use UnsortedArrayMinPQ to find the top 3 most commonly-reported WCAG recommendations
+//        MinPQ<Map.Entry<String, Integer>> minPQ = new UnsortedArrayMinPQ<>();
+//        for (Map.Entry<String, Integer> entry : tagCounts.entrySet()) {
+//            minPQ.add(entry);
+//            // Keep only top 3 tags
+//            if (minPQ.size() > 3) {
+//                minPQ.removeMin();
+//            }
+//        }
+//
+//        // Display the top 3 most commonly-reported WCAG recommendations
+//        System.out.println("Top 3 most commonly-reported WCAG recommendations:");
+//        while (!minPQ.isEmpty()) {
+//            Map.Entry<String, Integer> entry = minPQ.removeMin();
+//            String tag = entry.getKey();
+//            int count = entry.getValue();
+//            String description = wcagDefinitions.get(tag);
+//            System.out.println(description + " (Tag: " + tag + ", Count: " + count + ")");
+//        }
     }
 }

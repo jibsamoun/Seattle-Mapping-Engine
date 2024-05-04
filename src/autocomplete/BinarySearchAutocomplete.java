@@ -37,7 +37,7 @@ public class BinarySearchAutocomplete implements Autocomplete {
         if (start < 0) {
             start = -(start + 1);
         }
-        for (int i = start; i < elements.size(); i++) { // iterate from word containing prefix until end of elements
+        for (int i = start; i < elements.size(); i++) { // iterate from word containing prefix
             CharSequence word = elements.get(i);
             if (Autocomplete.isPrefixOf(prefix, word)) { // if word contains prefix
                 matches.add(word); // add to matches list
