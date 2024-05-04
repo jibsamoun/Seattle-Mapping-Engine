@@ -45,9 +45,9 @@ public class OptimizedHeapMinPQ<E> implements MinPQ<E> {
         }
 
         elements.add(new PriorityNode<>(element, priority));
-        int index = elements.size() - 1;
+        int index = elements.size() - 1; // added to end
         elementsToIndex.put(element, index);
-        swim(index);
+        swim(index); // percolate up to the correct position
     }
 
     @Override
@@ -66,7 +66,7 @@ public class OptimizedHeapMinPQ<E> implements MinPQ<E> {
         if (isEmpty()) {
             throw new NoSuchElementException("PQ is empty");
         }
-        return elements.get(0).getElement();
+        return elements.get(0).getElement(); // min is at the root
     }
 
     @Override
@@ -88,13 +88,13 @@ public class OptimizedHeapMinPQ<E> implements MinPQ<E> {
         if (!contains(element)) {
             throw new NoSuchElementException("PQ does not contain " + element);
         }
-        int index = elementsToIndex.get(element);
-        double lastPriority = elements.get(index).getPriority();
-        elements.get(index).setPriority(priority);
-        if (priority < lastPriority) {
-            swim(index);
-        } else {
-            sink(index);
+        int index = elementsToIndex.get(element); // element's map index
+        double lastPriority = elements.get(index).getPriority(); // element's former priority before update
+        elements.get(index).setPriority(priority); // set new priority
+        if (priority < lastPriority) { // if new priority less than old priority
+            swim(index); // percolate up
+        } else { // otherwise
+            sink(index); // percolate down
         }
     }
 
@@ -112,7 +112,7 @@ public class OptimizedHeapMinPQ<E> implements MinPQ<E> {
      * @param k the index of the element to swim up in the heap
      */
     private void swim(int k) {
-        while (k > 0 && greater(parent(k), k)) {
+        while (k > 0 && greater(parent(k), k)) { // while k is not @ root && parent node is greater than given node
             exch(k, parent(k)); // exchange k with its parent
             k = parent(k);
         }
