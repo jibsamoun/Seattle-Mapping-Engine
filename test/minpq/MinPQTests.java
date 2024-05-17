@@ -5,8 +5,8 @@ import org.junit.jupiter.api.TestInstance;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Random;
-import java.util.Scanner;
+import java.io.IOException;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -124,4 +124,115 @@ public abstract class MinPQTests {
             }
         }
     }
+
+    @Test
+    public void largeScaleReportAnalyzerSimulation() throws IOException {
+        // Read WCAG tags from the file
+        List<String> wcagTags = readWCAGTagsFromFile("data/wcag.tsv");
+
+        // Create reference and testing implementations of MinPQ
+        MinPQ<String> reference = createMinPQ();
+        MinPQ<String> testing = createMinPQ();
+
+        // Simulate counting exactly 10,000 WCAG tags
+        Random random = new Random();
+        for (int i = 0; i < 10000; i++) {
+            String randomTag = wcagTags.get(random.nextInt(wcagTags.size()));
+            double randomPriority = random.nextDouble();
+            reference.addOrChangePriority(randomTag, randomPriority);
+            testing.addOrChangePriority(randomTag, randomPriority);
+        }
+
+        // Remove all tags and compare the remove orders
+        List<String> removeOrder = new ArrayList<>();
+        while (!reference.isEmpty()) {
+            String removedTagReference = reference.removeMin();
+            String removedTagTesting = testing.removeMin();
+            assertEquals(removedTagReference, removedTagTesting);
+            removeOrder.add(removedTagReference);
+        }
+    }
+
+    private List<String> readWCAGTagsFromFile(String filePath) throws IOException {
+        List<String> wcagTags = new ArrayList<>();
+        File inputFile = new File(filePath);
+        try (Scanner scanner = new Scanner(inputFile)) {
+            while (scanner.hasNextLine()) {
+                String[] line = scanner.nextLine().split("\t", 2);
+                String index = "wcag" + line[0].replace(".", "");
+                wcagTags.add(index);
+            }
+        }
+        return wcagTags;
+    }
+
+    private static final int TOP_TAGS_COUNT = 3;
+    @Test
+    public void modifiedLargeScaleReportAnalyzerSimulation() throws IOException {
+        // Read WCAG tags from the file
+        List<String> wcagTags = readWCAGTagsFromFile("data/wcag.tsv");
+
+        // Identify the top N most commonly-reported tags
+        Map<String, Integer> topTags = getTopTags(wcagTags, TOP_TAGS_COUNT);
+
+        // Create reference and testing implementations of MinPQ
+        MinPQ<String> reference = createMinPQ();
+        MinPQ<String> testing = createMinPQ();
+
+        // Simulate counting WCAG tags with upweighted top tags
+        Random random = new Random();
+        for (int i = 0; i < 10000; i++) {
+            String randomTag;
+            if (i < TOP_TAGS_COUNT * 100) {
+                // Upweight top tags
+                randomTag = selectRandomTopTag(topTags, random);
+            } else {
+                // Randomly select other tags
+                randomTag = wcagTags.get(random.nextInt(wcagTags.size()));
+            }
+            double randomPriority = random.nextDouble();
+            reference.addOrChangePriority(randomTag, randomPriority);
+            testing.addOrChangePriority(randomTag, randomPriority);
+        }
+
+        // Remove all tags and compare the remove orders
+        while (!reference.isEmpty()) {
+            assertEquals(reference.removeMin(), testing.removeMin());
+        }
+    }
+
+
+    private Map<String, Integer> getTopTags(List<String> wcagTags, int topCount) {
+        // Count occurrences of each tag
+        Map<String, Integer> tagCounts = new HashMap<>();
+        for (String tag : wcagTags) {
+            tagCounts.put(tag, tagCounts.getOrDefault(tag, 0) + 1);
+        }
+
+        // Sort tags by frequency in descending order
+        List<Map.Entry<String, Integer>> sortedTags = new ArrayList<>(tagCounts.entrySet());
+        sortedTags.sort(Map.Entry.comparingByValue(Comparator.reverseOrder()));
+
+        // Select top N tags
+        Map<String, Integer> topTags = new LinkedHashMap<>();
+        for (int i = 0; i < Math.min(topCount, sortedTags.size()); i++) {
+            topTags.put(sortedTags.get(i).getKey(), sortedTags.get(i).getValue());
+        }
+        return topTags;
+    }
+
+    private String selectRandomTopTag(Map<String, Integer> topTags, Random random) {
+        // Randomly select a top tag with probability proportional to its frequency
+        int totalFrequency = topTags.values().stream().mapToInt(Integer::intValue).sum();
+        int randomIndex = random.nextInt(totalFrequency);
+        int cumulativeFrequency = 0;
+        for (Map.Entry<String, Integer> entry : topTags.entrySet()) {
+            cumulativeFrequency += entry.getValue();
+            if (randomIndex < cumulativeFrequency) {
+                return entry.getKey();
+            }
+        }
+        throw new IllegalStateException("Failed to select a random top tag.");
+    }
 }
+

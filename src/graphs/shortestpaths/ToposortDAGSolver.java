@@ -2,6 +2,8 @@ package graphs.shortestpaths;
 
 import graphs.Edge;
 import graphs.Graph;
+import minpq.DoubleMapMinPQ;
+import minpq.MinPQ;
 
 import java.util.*;
 
@@ -25,7 +27,29 @@ public class ToposortDAGSolver<V> implements ShortestPathSolver<V> {
         edgeTo = new HashMap<>();
         distTo = new HashMap<>();
         // TODO: Replace with your code
-        throw new UnsupportedOperationException("Not implemented yet");
+        // throw new UnsupportedOperationException("Not implemented yet");
+
+        List<V> order = new ArrayList<>();
+        Set<V> visited = new HashSet<>();
+        dfsPostOrder(graph, start, visited, order);
+        Collections.reverse(order);
+        distTo.put(start, 0.0);
+
+        for (V vertex : order) {
+            for (Edge<V> edge : graph.neighbors(vertex)) {
+                relax(edge);
+            }
+        }
+    }
+
+    private void relax(Edge<V> edge) {
+        V from = edge.from;
+        V to = edge.to;
+        double weight = edge.weight;
+        if (distTo.get(from) + weight < distTo.getOrDefault(to, Double.POSITIVE_INFINITY)) {
+            distTo.put(to, distTo.get(from) + weight);
+            edgeTo.put(to, edge);
+        }
     }
 
     /**
@@ -38,7 +62,17 @@ public class ToposortDAGSolver<V> implements ShortestPathSolver<V> {
      */
     private void dfsPostOrder(Graph<V> graph, V start, Set<V> visited, List<V> result) {
         // TODO: Replace with your code
-        throw new UnsupportedOperationException("Not implemented yet");
+        // throw new UnsupportedOperationException("Not implemented yet");
+        // Conduct DFS post-order
+        // Reverse the output using Collections.reverse in ToposortDAGSolver
+        visited.add(start);
+        for (Edge<V> edge : graph.neighbors(start)) {
+            V neighbor = edge.to;
+            if (!visited.contains(neighbor)) {
+                dfsPostOrder(graph, neighbor, visited, result);
+            }
+        }
+        result.add(start);
     }
 
     @Override
@@ -54,3 +88,5 @@ public class ToposortDAGSolver<V> implements ShortestPathSolver<V> {
         return path;
     }
 }
+
+

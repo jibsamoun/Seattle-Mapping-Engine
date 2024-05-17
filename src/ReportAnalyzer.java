@@ -1,4 +1,5 @@
 import minpq.MinPQ;
+import minpq.OptimizedHeapMinPQ;
 import minpq.UnsortedArrayMinPQ;
 import java.util.HashMap;
 import java.io.File;
@@ -41,7 +42,20 @@ public class ReportAnalyzer {
                 .toList();
 
         // TODO: Display the most commonly-reported WCAG recommendations using MinPQ
-         throw new UnsupportedOperationException();
+        // throw new UnsupportedOperationException();
         // Count occurrences of each unique WCAG tag
+        MinPQ<String> wcagPQ = new UnsortedArrayMinPQ<>();
+        for (String tag : wcagTags) {
+            if (wcagPQ.contains((tag))) {
+                wcagPQ.changePriority(tag, wcagPQ.getPriority(tag) + 1);
+            } else {
+                wcagPQ.add(tag, 1);
+            }
+        }
+
+        while (!wcagPQ.isEmpty()) {
+            System.out.println(wcagDefinitions.get(wcagPQ.removeMin()));
+        }
+
     }
 }

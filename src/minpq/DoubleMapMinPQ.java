@@ -50,12 +50,12 @@ public class DoubleMapMinPQ<E> implements MinPQ<E> {
         if (contains(element)) {
             throw new IllegalArgumentException("Already contains " + element);
         }
-        if (!priorityToElement.containsKey(priority)) {
-            priorityToElement.put(priority, new HashSet<>());
+        if (!priorityToElement.containsKey(priority)) { // if priority DNE in TreeMap
+            priorityToElement.put(priority, new HashSet<>()); // add priority as new key in TreeMap
         }
-        Set<E> elementsWithPriority = priorityToElement.get(priority);
-        elementsWithPriority.add(element);
-        elementToPriority.put(element, priority);
+        Set<E> elementsWithPriority = priorityToElement.get(priority); // returns set of elements w/ given priority
+        elementsWithPriority.add(element); // adds element to set of elements w/ same priority for the TreeMap
+        elementToPriority.put(element, priority); // adds element and priority as (key,value) pair in HashMap
     }
 
     @Override
@@ -86,14 +86,14 @@ public class DoubleMapMinPQ<E> implements MinPQ<E> {
         if (isEmpty()) {
             throw new NoSuchElementException("PQ is empty");
         }
-        double minPriority = priorityToElement.firstKey();
-        Set<E> elementsWithMinPriority = priorityToElement.get(minPriority);
-        E element = firstOf(elementsWithMinPriority);
-        elementsWithMinPriority.remove(element);
-        if (elementsWithMinPriority.isEmpty()) {
-            priorityToElement.remove(minPriority);
+        double minPriority = priorityToElement.firstKey(); // first key of TreeMap
+        Set<E> elementsWithMinPriority = priorityToElement.get(minPriority); // set of elements w/ min priority
+        E element = firstOf(elementsWithMinPriority); // returns an element w/ min priority
+        elementsWithMinPriority.remove(element); // removes element w/ min priority from set
+        if (elementsWithMinPriority.isEmpty()) { // if we removed last element from set of min priority elements
+            priorityToElement.remove(minPriority); // removes min priority as a key from TreeMap
         }
-        elementToPriority.remove(element);
+        elementToPriority.remove(element); // remove min element from TreeMap
         return element;
     }
 
@@ -102,15 +102,17 @@ public class DoubleMapMinPQ<E> implements MinPQ<E> {
         if (!contains(element)) {
             throw new NoSuchElementException("PQ does not contain " + element);
         }
-        double oldPriority = elementToPriority.get(element);
-        if (priority != oldPriority) {
-            Set<E> elementsWithOldPriority = priorityToElement.get(oldPriority);
-            elementsWithOldPriority.remove(element);
-            if (elementsWithOldPriority.isEmpty()) {
-                priorityToElement.remove(oldPriority);
+        // elementToPriority = HashMap of elements to their associated priority value
+        double oldPriority = elementToPriority.get(element); // returns old priority value of given element
+        if (priority != oldPriority) { // if new priority does not equal old priority
+            Set<E> elementsWithOldPriority = priorityToElement.get(oldPriority); // returns set of element w/ old priority
+            elementsWithOldPriority.remove(element); // remove element from set
+            if (elementsWithOldPriority.isEmpty()) { // if we removed last element from set
+                priorityToElement.remove(oldPriority); // remove old priority as a key from TreeMap
             }
-            elementToPriority.remove(element);
-            add(element, priority);
+            elementToPriority.remove(element); // remove given element as key from Hashmap
+            add(element, priority); // adds element with new priority into Hashmap
+            // also adds element with new priority into correct set for TreeMap
         }
     }
 

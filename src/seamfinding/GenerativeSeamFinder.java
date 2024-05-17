@@ -69,8 +69,18 @@ public class GenerativeSeamFinder implements SeamFinder {
         private final Node source = new Node() {
             @Override
             public List<Edge<Node>> neighbors(Picture picture, EnergyFunction f) {
-                // TODO: Replace with your code
-                throw new UnsupportedOperationException("Not implemented yet");
+                // iterate thru each row of the first column of the picture
+                // for each pixel in the first column, create new 'Pixel' object
+                // Create an edge from source node to each of these pixels
+                // Calculate the weight of each edge using 'EnergyFunction'
+                // applied to the corresponding pixel in the picture
+                List<Edge<Node>> result = new ArrayList<>(picture.height());
+                for (int j = 0; j < picture.height(); j++) {
+                    Pixel neighbor = new Pixel(0, j); // 0 is first (left-most) column of picture, j traverses column
+                    // creates edge between source and neighboring vertices: applies weight using EnergyFunction on neighboring vertex
+                    result.add(new Edge<>(source, neighbor, f.apply(picture, 0, j)));
+                }
+                return result;
             }
         };
         /**
@@ -79,8 +89,7 @@ public class GenerativeSeamFinder implements SeamFinder {
         private final Node sink = new Node() {
             @Override
             public List<Edge<Node>> neighbors(Picture picture, EnergyFunction f) {
-                // TODO: Replace with your code
-                throw new UnsupportedOperationException("Not implemented yet");
+                return new ArrayList<>();
             }
         };
 
@@ -126,8 +135,21 @@ public class GenerativeSeamFinder implements SeamFinder {
 
             @Override
             public List<Edge<Node>> neighbors(Picture picture, EnergyFunction f) {
-                // TODO: Replace with your code
-                throw new UnsupportedOperationException("Not implemented yet");
+                List<Edge<Node>> result = new ArrayList<>();
+                Pixel currentPixel = new Pixel(this.x, this.y);
+
+                if (this.x + 1 == picture.width()) {
+                    result.add(new Edge<>(currentPixel, sink, 0));
+                    return result;
+                }
+
+                for (int i = this.y - 1; i <= this.y + 1; i++) {
+                    if (0 <= i && i < picture.height()) {
+                        Pixel neighborPixel = new Pixel(this.x + 1, i);
+                        result.add(new Edge<>(currentPixel, neighborPixel, f.apply(picture, this.x + 1, i)));
+                    }
+                }
+                return result;
             }
 
             @Override
