@@ -47,15 +47,15 @@ public class ReportAnalyzer {
         MinPQ<String> wcagPQ = new UnsortedArrayMinPQ<>();
         for (String tag : wcagTags) {
             if (wcagPQ.contains((tag))) {
-                wcagPQ.changePriority(tag, wcagPQ.getPriority(tag) + 1);
+                wcagPQ.changePriority(tag, wcagPQ.getPriority(tag) - 1);
             } else {
-                wcagPQ.add(tag, 1);
+                wcagPQ.add(tag, -1);
             }
         }
 
-        while (!wcagPQ.isEmpty()) {
-            System.out.println(wcagDefinitions.get(wcagPQ.removeMin()));
+        for (int i = 0; i < 3; i++) {
+            String tag = wcagPQ.removeMin();
+            System.out.println(wcagDefinitions.get(tag));
         }
-
     }
 }
