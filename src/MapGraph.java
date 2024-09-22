@@ -169,14 +169,15 @@ public class MapGraph implements AStarGraph<Point> {
      * Adds an edge to this graph if it doesn't already exist using distance as the weight.
      *
      * @param from the originating point of the edge.
-     * @param to the terminating point of the edge.
+     * s@param to the terminating point of the edge.
      * @param accessScore the access score for the edge where 0 is inaccessible and 1 is accessible.
      */
     private void addEdge(Point from, Point to, double accessScore) {
         if (!neighbors.containsKey(from)) {
             neighbors.put(from, new ArrayList<>());
         }
-        neighbors.get(from).add(new Edge<>(from, to, estimatedDistance(from, to) / accessScore));
+        neighbors.get(from).add(new Edge<>(from, to,
+                estimatedDistance(from, to) / accessScore));
     }
 
     /**

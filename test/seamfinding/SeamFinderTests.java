@@ -132,7 +132,7 @@ public abstract class SeamFinderTests {
     }
 
     @Nested
-    @Disabled
+   // @Disabled
     class RuntimeExperiments {
         /**
          * Maximum image dimensions in pixels. Making this smaller means experiments run faster.
