@@ -1,7 +1,6 @@
 # Project
 
-A web app for mapping the world, searching for places, and navigating around Seattle. The app is designed to highlight 4 components: [**Deques**](src/deques/), [**Autocomplete**](src/autocomplete/), [**Priority Queues**](src/minpq/), and [**Seam Finding**](src/seamfinding/).
-
+A web app for mapping the world, searching for places, and navigating around Seattle. 
 ## Setup
 
 This project is pre-configured for [IntelliJ IDEA](https://www.jetbrains.com/idea/download/). Run any of the top-level client classes.
