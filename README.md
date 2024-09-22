@@ -8,7 +8,7 @@ This project is pre-configured for [IntelliJ IDEA](https://www.jetbrains.com/ide
 - `BrowserHistory` to simulate web browser history using a `Deque`.
 - `CitySearch` to search city names using `Autocomplete`.
 - `DNASearch` to search all the suffixes of a DNA sequence using `Autocomplete`.
-- `MapServer` to run Husky Maps, an educational web app for getting around Seattle.
+- `MapServer` to run Husky Maps, a web app for getting around Seattle.
 - `ReportAnalyzer` to count web accessibility statistics from Lighthouse reports using `MinPQ`.
 - `SeamCarver` to remove the least-noticeable vertical or horizontal seams from an image.
 
